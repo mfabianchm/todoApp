@@ -1,5 +1,13 @@
 package com.example.todo_app.models;
 
+
+/*📦 What is a DTO?
+DTO stands for Data Transfer Object.It's a simple object used to carry data between different
+layers of an application — especially between the UI (frontend) and the backend/service/database.
+It typically contains only fields and getters/setters — no business logic.
+DTOs let you control exactly what data the client sees or sends, useful in APIs or web apps.
+*/
+
 public class UserDto {
 
     private String username;

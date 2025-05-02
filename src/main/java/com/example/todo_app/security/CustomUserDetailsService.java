@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
+//UserDetailsService is a core interface in Spring Security.
+//It’s responsible for loading user-specific data during the login process — typically from a database.
+//Here we are using a our custom UserDetailsService implementation
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

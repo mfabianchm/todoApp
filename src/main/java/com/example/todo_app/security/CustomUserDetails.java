@@ -5,6 +5,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/*UserDetails is an interface in Spring Security that represents the core user information used
+for authentication and authorization.
+Spring uses it as a standardized way to describe any user, no matter where they come from
+        (a database, an LDAP server, an API, etc.).
+ */
+
 public class CustomUserDetails implements UserDetails {
 
     private String username;
@@ -24,6 +30,10 @@ public class CustomUserDetails implements UserDetails {
         return email;
     }
 
+    /*this method returns a collection (like a list or set) of objects that represent the roles or
+    permissions the user has.*/
+    /*It’s saying:
+            “I will return a collection of objects that are either GrantedAuthority or any subclass of it.”*/
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

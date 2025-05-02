@@ -20,6 +20,16 @@ public class UserController {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /*Even though you're referencing the interface UserService, Spring is injecting an instance
+    of the implementation class UserServiceImpl.*/
+
+    /*Spring sees:
+        “OK, I need to inject a bean that implements UserService.”
+    It finds UserServiceImpl (because it's annotated with @Service), and injects an instance of it.
+    private final UserService userService;*/
+
+    //so UserService is not really injected here because is not a bean is a simple interface.
+
     private UserService userService;
 
     public UserController(UserService userService) {
@@ -35,7 +45,6 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(Model model, UserDto userDto) {
-
         model.addAttribute("user", userDto);
         return "login";
     }
@@ -47,7 +56,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerSava(@ModelAttribute("user") UserDto userDto, Model model) {
+    public String registerUser(@ModelAttribute("user") UserDto userDto, Model model) {
         User user = userService.findByUsername(userDto.getUsername());
         if (user != null) {
             model.addAttribute("Userexist", user);
