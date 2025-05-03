@@ -3,6 +3,10 @@ package com.example.todo_app.models;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
+//User is the parent entity
 @Entity
 @Table(name = "users")
 public class User {
@@ -17,6 +21,8 @@ public class User {
     private String password;
     @NonNull
     private String email;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 
     public User() {
     }
@@ -62,6 +68,14 @@ public class User {
         this.email = email;
     }
 
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -69,6 +83,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", tasks=" + tasks +
                 '}';
     }
 }

@@ -36,6 +36,9 @@ public class UserController {
         this.userService = userService;
     }
 
+
+    /*Spring automatically provides the Principal based on who is logged in. Internally, Spring builds it
+    from the Authentication object in the SecurityContext.*/
     @GetMapping("/home")
     public String home(Model model, Principal principal) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
