@@ -1,6 +1,7 @@
 package com.example.todo_app.controllers;
 
 import com.example.todo_app.models.Task;
+import com.example.todo_app.models.TaskDto;
 import com.example.todo_app.models.User;
 import com.example.todo_app.services.TaskService;
 import com.example.todo_app.services.UserService;
@@ -15,7 +16,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/api")
 public class TaskController {
 
     @Autowired
@@ -34,22 +35,30 @@ public class TaskController {
 
 
 //GET ALL TASKS
-    @GetMapping("/getTasks")
+    @GetMapping("/tasks")
     public ResponseEntity<List<Task>> getUserTasks(Principal principal) {
         //we retrieve the user
         User user = userService.findByUsername(principal.getName());
+        System.out.println(principal.getName());
         //retrieve user list of tasks
         List<Task> tasks = taskService.getTasksByUserId(user.getId());
         return  ResponseEntity.ok(tasks);
     }
 
     // ADD NEW TASK
-    @PostMapping("/createTask")
-    public ResponseEntity<Task> createTask(@RequestBody Task task, Principal principal) {
+    @PostMapping("/tasks")
+    public ResponseEntity<Task> createTask(@RequestBody TaskDto taskDto, Principal principal) {
         // Get username from the authenticated session
         User user = userService.findByUsername(principal.getName());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         // Associate the task with the authenticated user
+        Task task = new Task();
+        task.setCompleted(taskDto.getIsCompleted());
+        task.setUrgent(taskDto.getIsUrgent());
+        task.setDescription(taskDto.getDescription());
         task.setUser(user);
 
         Task savedTask = taskService.createTask(task, user.getId());

@@ -1,5 +1,6 @@
 package com.example.todo_app.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 
@@ -24,6 +25,7 @@ public class Task {
      key of the university table.*/
      @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+     @JsonBackReference
     private User user;
 
     public Long getId() {

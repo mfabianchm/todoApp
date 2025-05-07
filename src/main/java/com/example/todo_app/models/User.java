@@ -1,5 +1,6 @@
 package com.example.todo_app.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 
@@ -22,6 +23,7 @@ public class User {
     @NonNull
     private String email;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Task> tasks = new ArrayList<>();
 
     public User() {
