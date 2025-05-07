@@ -3,7 +3,10 @@ package com.example.todo_app.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -42,18 +45,20 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http.csrf(AbstractHttpConfigurer::disable)
-                    .authorizeHttpRequests(registry->{
-                        registry.requestMatchers("/register", "/home").permitAll()
-                                .anyRequest().authenticated();
-                        ;
-                    })
-                    .formLogin(httpSecurityFormLoginConfigurer -> {
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/api/auth/login", "/register", "/home").permitAll()
+                            .anyRequest().authenticated()
+                    )
+                   /* .formLogin(httpSecurityFormLoginConfigurer -> {
                         httpSecurityFormLoginConfigurer
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
                                 .defaultSuccessUrl("/home", true)
                                 .permitAll();
-                    })
+                    })*/
+                    .httpBasic(Customizer.withDefaults())
+                    .formLogin(AbstractHttpConfigurer::disable
+                    )
                     .logout(logout -> logout
                             .logoutUrl("/logout")
                             .logoutSuccessUrl("/login?logout")
@@ -61,7 +66,9 @@ public class SecurityConfig {
                             .clearAuthentication(true)
                             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                             .deleteCookies("JSESSIONID")
-                            .permitAll()); // Ensure logout is permitted
+                            .permitAll()
+                    );
+            // Ensure logout is permitted
             return http.build();
         }
 
@@ -84,4 +91,9 @@ public class SecurityConfig {
         public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
             auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
         }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
 }
