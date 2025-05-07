@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
 import java.security.Principal;
@@ -20,15 +18,16 @@ public class UserController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    /*Even though you're referencing the interface UserService, Spring is injecting an instance
-    of the implementation class UserServiceImpl.*/
 
-    /*Spring sees:
+
+    /*
+    Even though you're referencing the interface UserService, Spring is injecting an instance
+    of the implementation class UserServiceImpl.
+    Spring sees:
         “OK, I need to inject a bean that implements UserService.”
     It finds UserServiceImpl (because it's annotated with @Service), and injects an instance of it.
-    private final UserService userService;*/
-
-    //so UserService is not really injected here because is not a bean is a simple interface.
+    private final UserService userService;
+    so UserService is not really injected here because is not a bean is a simple interface.*/
 
     private UserService userService;
 
