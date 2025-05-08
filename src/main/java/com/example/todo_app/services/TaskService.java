@@ -1,5 +1,7 @@
 package com.example.todo_app.services;
 
+import com.example.todo_app.exception.TaskNotFoundException;
+import com.example.todo_app.exception.UnauthorizedAccessException;
 import com.example.todo_app.models.Task;
 import com.example.todo_app.models.User;
 import com.example.todo_app.repository.TaskRepository;
