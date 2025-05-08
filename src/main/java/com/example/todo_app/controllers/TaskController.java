@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -65,15 +66,44 @@ public class TaskController {
         return ResponseEntity.ok(savedTask);
     }
 
+    // DELETE TASK
+    @DeleteMapping("/tasks/{taskId}")
+    public ResponseEntity<?> deleteTask(@PathVariable Long taskId, Principal principal) {
+
+        //Get the task
+        Optional<Task> optionalTask = taskService.findById(taskId);
+
+        // Check if the task exists
+        if (optionalTask.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Task not found");
+        }
+
+        //.get() is a method that retrieves the value inside the Optional if it's present.
+        Task task = optionalTask.get();
+
+        // check if the task belongs to the logged-in user
+        String username = principal.getName();
+        if (!task.getUser().getUsername().equals(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("You are not allowed to delete this task");
+        }
+
+        // Perform deletion
+        taskService.deleteTask(task.getId());
+
+        return ResponseEntity.ok("Task deleted successfully");
+    }
 
 
+    //UPDATE TASK
+    @PatchMapping("/api/tasks/{taskId}")
+    public ResponseEntity<?> partialUpdateTask(@PathVariable Long taskId, @RequestBody Task updatedTask, Principal principal) {
+        Task updatedTaskResult = taskService.updateTask(taskId, updatedTask, principal);
+        return ResponseEntity.ok(updatedTaskResult);  // HTTP 200 OK with the updated task
+    }
 
 
-//    @PostMapping
-//    public ResponseEntity<Task> createTask(@RequestBody Task task, @RequestParam Long userId) {
-//        Task createdTask = taskService.createTask(task, userId);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
-//    }
 
 
 
