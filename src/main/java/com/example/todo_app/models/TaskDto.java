@@ -1,9 +1,25 @@
 package com.example.todo_app.models;
 
 public class TaskDto {
+
+    private Long id;
     private Boolean isCompleted;
     private Boolean isUrgent;
     private String description;
+
+    public TaskDto() {
+    }
+
+    public TaskDto(Long id, Boolean isCompleted, Boolean isUrgent, String description) {
+        this.id = id;
+        this.isCompleted = isCompleted;
+        this.isUrgent = isUrgent;
+        this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public Boolean getIsCompleted() {
         return isCompleted;
