@@ -76,7 +76,7 @@ public class TaskController {
 
 
     //UPDATE TASK
-    @PatchMapping("/api/tasks/{taskId}")
+    @PatchMapping("/tasks/{taskId}")
     public ResponseEntity<?> partialUpdateTask(@PathVariable Long taskId, @RequestBody Task updatedTask, Principal principal) {
         Task updatedTaskResult = taskService.updateTask(taskId, updatedTask, principal);
         return ResponseEntity.ok(updatedTaskResult);  // HTTP 200 OK with the updated task
